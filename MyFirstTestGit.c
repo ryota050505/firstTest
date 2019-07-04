@@ -124,7 +124,7 @@ void choose_color();																	//猫の色選択
 void setFlag(hword);																	//クリアしたかしていないかの判断の旗のTRUE,FALSE設定
 void discover(hword t[12][8]);												//お宝の当たり判定
 void treasurePaint(hword t[12][8]);
-void mapping();
+void mapping();																				//マップ描画
 void mainAction();
 void dig(hword t[12][8]);															//穴を掘るかどうか判定
 hword check(hword, hword, hword t[12][8]);						//お宝かどうか判定
@@ -170,6 +170,31 @@ int main(void) {
 
 
 /***********************大きな役割を持つ関数******************************/
+/*全てのアクション*/
+void allAction(){
+
+	*((hword *)IOBASE) = 0xF03;
+
+	while(1){
+		start();													//開始画面
+		explain();												//説明
+
+		while(gameFlag==1){
+
+			init();												//初期化
+			choose_color();								//色を選ぶ
+			prologue();										//プロローグ
+
+			prepare(treasure2);						//初期の真ん中のマップの準備
+			mainAction();									//メインとなる動き
+
+			end();
+		}
+	}
+}
+
+/************************************************************/
+
 /*スタート画面*/
 void start(){
 
@@ -1197,31 +1222,6 @@ void end(){
 		}
 	}
 }
-
-/*全てのアクション*/
-void allAction(){
-
-	*((hword *)IOBASE) = 0xF03;
-
-	while(1){
-		start();													//開始画面
-		explain();												//説明
-
-		while(gameFlag==1){
-
-			init();												//初期化
-			choose_color();								//色を選ぶ
-			prologue();										//プロローグ
-
-			prepare(treasure2);						//初期の真ん中のマップの準備
-			mainAction();									//メインとなる動き
-
-			end();
-		}
-	}
-}
-
-/************************************************************/
 
 
 /*スタート画面描画*/
@@ -2317,6 +2317,7 @@ void panic_catPaint(){
 	}
 }
 
+/*スタート画面の雲をペイントする*/
 void cloudPaint(){
 
 	hword tx,ty;
@@ -2440,6 +2441,7 @@ void cloudPaint(){
 	}
 }
 
+/*エンディングの缶を描画するメソッド*/
 void canPaint(){
 	hword tx,ty;
 	for(tx=0; tx<20; tx++){
